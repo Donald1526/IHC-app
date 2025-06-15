@@ -1,0 +1,46 @@
+# Learn more https://docs.github.com/en/get-started/getting-started-with-git/ignoring-files
+
+# Node modules
+node_modules/
+
+# Expo/React Native
+.expo/
+.expo-shared/
+dist/
+build/
+web-build/
+.expo copy/
+# macOS
+.DS_Store
+
+# VSCode
+.vscode/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Env files
+.env
+.env.*
+
+# OS generated
+Thumbs.db
+
+# Android/iOS build
+android/
+ios/
+
+# Python virtual environments
+venv/
+
+# Misc
+*.log
+*.lock
+
+# Ignore coverage
+coverage/
+
+# Ignore Expo web cache
+web/cache/
