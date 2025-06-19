@@ -227,7 +227,7 @@ export default function BreathingExercise() {
         <View style={styles.bottomBarRow}>
           {/* Izquierda: selector o contador */}
           <View style={styles.leftBox}>
-            {!started && !showFeedback ? (
+            {(!started && !showFeedback) || showFeedback ? (
               <Picker
                 selectedValue={selectedDuration}
                 style={styles.pickerOnly}
