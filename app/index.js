@@ -1,15 +1,14 @@
-import React from 'react';
+import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import {
-  View,
+  Dimensions,
+  SafeAreaView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  SafeAreaView,
-  Dimensions,
+  View,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import Animated, { FadeInUp, FadeInDown } from 'react-native-reanimated';
-import { Ionicons } from '@expo/vector-icons';
+import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
 const { width } = Dimensions.get('window');
 
@@ -30,6 +29,13 @@ export default function HomeScreen() {
       icon: 'book-outline',
       route: '/speed-reader',
       color: '#10b981',
+    },
+    {
+      title: 'Práctica de Presentación',
+      description: 'Graba tu exposición y recibe retroalimentación simulada',
+      icon: 'mic-outline',
+      route: '/camera',
+      color: '#f59e0b',
     },
   ];
 
