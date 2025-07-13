@@ -31,7 +31,6 @@ export default function HomeScreen() {
       color: '#10b981',
     },
     {
-
       title: 'Ejercicio de Respiración',
       description: 'Relájate con una rutina guiada de respiración',
       icon: 'body-outline',
@@ -44,7 +43,8 @@ export default function HomeScreen() {
       icon: 'happy-outline',
       route: '/emotion-simulator',
       color: '#4FC3F7',
-
+    },
+    {
       title: 'Práctica de Presentación',
       description: 'Graba tu exposición y recibe retroalimentación simulada',
       icon: 'mic-outline',
@@ -67,7 +67,7 @@ export default function HomeScreen() {
           entering={FadeInUp.duration(800)}
           style={styles.header}
         >
-          <Text style={styles.title}>Bienestar Mental</Text>
+          <Text style={styles.title}>UniBalance</Text>
           <Text style={styles.subtitle}>
             Herramientas para mejorar tu bienestar mental y cognitivo
           </Text>

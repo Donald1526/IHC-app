@@ -10,6 +10,8 @@ export default function RootLayout() {
         <Stack.Screen name="trivia" />
         <Stack.Screen name="speed-reader" />
         <Stack.Screen name="camera" />
+        <Stack.Screen name="breathing-exercise" />
+        <Stack.Screen name="emotion-simulator" />
         <Stack.Screen name="PausasActivas" />
         <Stack.Screen name="EstiramientosScreen" />
         <Stack.Screen name="DescansoVisualScreen" />
