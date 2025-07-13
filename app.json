@@ -9,7 +9,12 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSCameraUsageDescription": "Esta app necesita acceso a tu cámara para grabar videos.",
+        "NSMicrophoneUsageDescription": "Esta app necesita acceso a tu micrófono para grabar audio con los videos.",
+        "NSPhotoLibraryUsageDescription": "Esta app necesita acceso a tu galería para guardar tus grabaciones."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -17,7 +22,14 @@
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.donald1526.AplicacionIHC"
+      "package": "com.donald1526.AplicacionIHC",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.ACCESS_MEDIA_LOCATION"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -26,6 +38,14 @@
     },
     "plugins": [
       "expo-router",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Esta app necesita acceso a tu cámara para grabar videos.",
+          "microphonePermission": "Esta app necesita acceso a tu micrófono para grabar audio con los videos.",
+          "recordAudioAndroid": true
+        }
+      ],
       [
         "expo-splash-screen",
         {
