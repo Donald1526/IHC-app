@@ -31,6 +31,20 @@ export default function HomeScreen() {
       color: '#10b981',
     },
     {
+
+      title: 'Ejercicio de Respiración',
+      description: 'Relájate con una rutina guiada de respiración',
+      icon: 'body-outline',
+      route: '/breathing-exercise',
+      color: '#a78bfa',
+    },
+    {
+      title: 'Mi estado emocional',
+      description: 'Registra cómo te sientes y recibe apoyo',
+      icon: 'happy-outline',
+      route: '/emotion-simulator',
+      color: '#4FC3F7',
+
       title: 'Práctica de Presentación',
       description: 'Graba tu exposición y recibe retroalimentación simulada',
       icon: 'mic-outline',
@@ -49,8 +63,8 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Animated.View 
-          entering={FadeInUp.duration(800)} 
+        <Animated.View
+          entering={FadeInUp.duration(800)}
           style={styles.header}
         >
           <Text style={styles.title}>Bienestar Mental</Text>
@@ -83,8 +97,8 @@ export default function HomeScreen() {
           ))}
         </View>
 
-        <Animated.View 
-          entering={FadeInDown.delay(600).duration(800)} 
+        <Animated.View
+          entering={FadeInDown.delay(600).duration(800)}
           style={styles.footer}
         >
           <Text style={styles.footerText}>
