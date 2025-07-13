@@ -37,6 +37,13 @@ export default function HomeScreen() {
       route: '/camera',
       color: '#f59e0b',
     },
+    {
+      title: 'Pausas Activas',
+      description: 'Ejercicios de estiramiento y descanso visual',
+      icon: 'fitness-outline',
+      route: '/PausasActivas',
+      color: '#4ECDC4',
+    },
   ];
 
   return (
