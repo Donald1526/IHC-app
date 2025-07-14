@@ -225,9 +225,9 @@ export default function CameraScreen() {
   return (
     <SafeAreaView style={styles.cameraScreenContainer}>
       <View style={styles.backButtonOuterContainer}>
-          <TouchableOpacity style={styles.backButtonInnerContainer} onPress={() => router.back()}>
-              <FontAwesome name="arrow-left" size={24} color="black" />
-          </TouchableOpacity>
+        <TouchableOpacity style={styles.backButtonInnerContainer} onPress={() => router.replace('/')}>
+          <FontAwesome name="arrow-left" size={24} color="black" />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.headerContainer}>
