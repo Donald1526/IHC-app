@@ -17,6 +17,7 @@ import { readingTexts } from '../data/readingTexts';
 const { width } = Dimensions.get('window');
 
 export default function SpeedReaderScreen() {
+  const [helpVisible, setHelpVisible] = useState(false);
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('reading');
   const [selectedTextIndex, setSelectedTextIndex] = useState(0);
@@ -162,7 +163,11 @@ export default function SpeedReaderScreen() {
           <Ionicons name="arrow-back" size={24} color="#1e293b" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Entrenador de Lectura</Text>
-        <View style={styles.placeholder} />
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color="#1e293b" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Tab Selector */}
@@ -185,7 +190,7 @@ export default function SpeedReaderScreen() {
         </TouchableOpacity>
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView style={styles.content} contentContainerStyle={{ paddingBottom: 70 }} showsVerticalScrollIndicator={false}>
         {activeTab === 'reading' && (
           <Animated.View entering={FadeIn.duration(500)} style={styles.readingContainer}>
             {/* Settings */}
@@ -424,6 +429,20 @@ export default function SpeedReaderScreen() {
           </Animated.View>
         )}
       </ScrollView>
+
+      {/* Modal de ayuda */}
+      {helpVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+            Elige tu texto , velocidad. Entrena tu lectura con una seleccion rapida de palabras para despues medir tu comprencion con un divertido quiz.
+            </Text>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
+              <Text style={{ color: '#1e293b' }}>Entendido</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -437,7 +456,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    paddingTop: 40,
+    paddingHorizontal: 16,
     paddingVertical: 16,
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
@@ -450,6 +470,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#1e293b',
+  },
+  headerIcons: {
+    padding: 8,
   },
   placeholder: {
     width: 40,
@@ -468,7 +491,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'transparent',
   },
   tabActive: {
-    borderBottomColor: '#6366f1',
+    borderBottomColor: '#5ECBC2',
   },
   tabText: {
     fontSize: 16,
@@ -476,7 +499,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   tabTextActive: {
-    color: '#6366f1',
+    color: '#5ECBC2',
     fontWeight: '600',
   },
   content: {
@@ -522,7 +545,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   textOptionActive: {
-    borderColor: '#6366f1',
+    borderColor: '#5ECBC2',
     backgroundColor: '#f0f9ff',
   },
   textOptionTitle: {
@@ -531,7 +554,7 @@ const styles = StyleSheet.create({
     color: '#1e293b',
   },
   textOptionTitleActive: {
-    color: '#6366f1',
+    color: '#5ECBC2',
   },
   textOptionMeta: {
     fontSize: 12,
@@ -647,7 +670,7 @@ const styles = StyleSheet.create({
     width: 56,
     height: 56,
     borderRadius: 28,
-    backgroundColor: '#6366f1',
+    backgroundColor: '#5ECBC2',
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -788,7 +811,7 @@ const styles = StyleSheet.create({
   restartButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#6366f1',
+    backgroundColor: '#5ECBC2',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 8,
@@ -798,5 +821,36 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#ffffff',
     marginLeft: 8,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    padding: 20,
+    borderRadius: 12,
+    width: '80%',
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#374151',
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  closeBtn: {
+    backgroundColor: '#6366f1',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
 });

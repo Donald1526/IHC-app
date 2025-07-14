@@ -17,6 +17,7 @@ import { triviaData, themeNames, getRecommendations } from '../data/triviaData';
 const { width } = Dimensions.get('window');
 
 export default function TriviaScreen() {
+  const [helpVisible, setHelpVisible] = useState(false);
   const router = useRouter();
   const [selectedTheme, setSelectedTheme] = useState('nutricion');
   const [gameState, setGameState] = useState('playing');
@@ -118,7 +119,11 @@ export default function TriviaScreen() {
           <Ionicons name="arrow-back" size={24} color="#1e293b" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Trivia de Bienestar</Text>
-        <View style={styles.placeholder} />
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color="#1e293b" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
@@ -255,6 +260,20 @@ export default function TriviaScreen() {
           </Animated.View>
         )}
       </ScrollView>
+
+      {/* Modal de ayuda */}
+      {helpVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Aquí encontrarás información de ayuda sobre esta pantalla. Puedes personalizar este texto más adelante.
+            </Text>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
+              <Text style={{ color: '#1e293b' }}>Entendido</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -262,17 +281,18 @@ export default function TriviaScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#F7F5F4',
   },
   header: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
     backgroundColor: '#ffffff',
     borderBottomWidth: 1,
     borderBottomColor: '#e2e8f0',
+    paddingTop: 40,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
   },
   backButton: {
     padding: 8,
@@ -281,6 +301,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     color: '#1e293b',
+  },
+  headerIcons: {
+    padding: 8,
   },
   placeholder: {
     width: 40,
@@ -303,7 +326,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   themeButtonActive: {
-    backgroundColor: '#6366f1',
+    backgroundColor: '#5ECBC2',
   },
   themeButtonText: {
     fontSize: 14,
@@ -330,25 +353,27 @@ const styles = StyleSheet.create({
     color: '#64748b',
   },
   difficultyBadge: {
-    backgroundColor: '#f1f5f9',
+    backgroundColor: '#E0F7F5',
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 12,
+    alignSelf: 'flex-start',
   },
   difficultyText: {
-    fontSize: 12,
-    color: '#475569',
-    fontWeight: '500',
+    color: '#5ECBC2',
+    fontWeight: 'bold',
+    fontSize: 13,
   },
   progressBar: {
-    height: 4,
-    backgroundColor: '#e2e8f0',
-    borderRadius: 2,
+    height: 10,
+    borderRadius: 8,
+    backgroundColor: '#e5e7eb',
+    marginVertical: 16,
   },
   progressFill: {
-    height: '100%',
-    backgroundColor: '#6366f1',
-    borderRadius: 2,
+    height: 10,
+    borderRadius: 8,
+    backgroundColor: '#5ECBC2',
   },
   questionContainer: {
     marginBottom: 32,
@@ -439,16 +464,16 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     borderRadius: 60,
-    backgroundColor: '#ddd6fe',
+    backgroundColor: '#C0E0ED',
     borderWidth: 4,
-    borderColor: '#6366f1',
+    borderColor: '#5CAFD6',
     justifyContent: 'center',
     alignItems: 'center',
   },
   scoreText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#6366f1',
+    color: '#5CAFD6',
   },
   trophy: {
     position: 'absolute',
@@ -471,7 +496,7 @@ const styles = StyleSheet.create({
   },
   recommendationsContainer: {
     width: '100%',
-    backgroundColor: '#ffffff',
+    backgroundColor: '#D7EFED',
     padding: 20,
     borderRadius: 16,
     marginBottom: 32,
@@ -503,7 +528,7 @@ const styles = StyleSheet.create({
   restartButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#6366f1',
+    backgroundColor: '#5ECBC2',
     paddingHorizontal: 24,
     paddingVertical: 12,
     borderRadius: 12,
@@ -513,5 +538,88 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#ffffff',
     marginLeft: 8,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    padding: 20,
+    borderRadius: 12,
+    alignItems: 'center',
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#475569',
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  closeBtn: {
+    backgroundColor: '#e2e8f0',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+  },
+  resultCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    borderWidth: 4,
+    borderColor: '#5CAFD6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#E0F7F5',
+  },
+  resultCircleText: {
+    fontSize: 32,
+    color: '#5ECBC2',
+    fontWeight: 'bold',
+  },
+  resultButton: {
+    backgroundColor: '#5ECBC2',
+    borderRadius: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'center',
+    elevation: 2,
+  },
+  resultButtonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  resultButtonSecondary: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    paddingVertical: 14,
+    paddingHorizontal: 32,
+    alignItems: 'center',
+    marginTop: 20,
+    alignSelf: 'center',
+    elevation: 2,
+    borderWidth: 2,
+    borderColor: '#5ECBC2',
+  },
+  resultButtonSecondaryText: {
+    color: '#5ECBC2',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });

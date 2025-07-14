@@ -269,7 +269,7 @@ export default function CameraScreen() {
         </View>
         <Text style={styles.timerText}>{formatTime(recordingDuration)}</Text>
       </View>
-
+              
       <View style={styles.bottomControlsContainer}>
           <TouchableOpacity style={styles.controlButton} onPress={handleReset} disabled={isRecording}>
               <FontAwesome name="refresh" size={24} color={isRecording ? 'lightgray' : 'gray'} />
@@ -432,12 +432,12 @@ const styles = StyleSheet.create({
     fontVariant: ['tabular-nums'],
   },
   bottomControlsContainer: {
-    position: 'absolute',
-    bottom: 50,
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
+    marginTop: 40,
+    marginBottom: 40,
   },
   controlButton: {
     alignItems: 'center',

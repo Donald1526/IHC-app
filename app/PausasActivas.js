@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 const PausasActivas = () => {
+  const [helpVisible, setHelpVisible] = useState(false);
   const router = useRouter();
   const scaleAnim1 = new Animated.Value(1);
   const scaleAnim2 = new Animated.Value(1);
@@ -46,7 +47,7 @@ const PausasActivas = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
       
-      {/* Header con botón de retroceso */}
+      {/* Header con botón de retroceso y ayuda */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton} 
@@ -55,6 +56,11 @@ const PausasActivas = () => {
         >
           <Ionicons name="chevron-back" size={24} color="#666" />
         </TouchableOpacity>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color="#666" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Título principal */}
@@ -118,6 +124,20 @@ const PausasActivas = () => {
       <View style={styles.bottomIndicator}>
         <View style={styles.indicator} />
       </View>
+
+      {/* Modal de ayuda */}
+      {helpVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Aquí encontrarás información de ayuda sobre esta pantalla. Puedes personalizar este texto más adelante.
+            </Text>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
+              <Text style={{ color: '#666' }}>Entendido</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -128,8 +148,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 40,
+    paddingHorizontal: 16,
     paddingBottom: 20,
   },
   backButton: {
@@ -147,6 +170,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   titleContainer: {
     alignItems: 'center',
@@ -246,6 +273,44 @@ const styles = StyleSheet.create({
     height: 5, // Más alto
     backgroundColor: '#ccc', // Más visible
     borderRadius: 3,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    color: '#333',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  closeBtn: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#ccc',
   },
 });
 

@@ -8,6 +8,7 @@ import {
   Easing,
   Image,
   Platform,
+  SafeAreaView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -213,7 +214,7 @@ export default function BreathingExercise() {
   const elapsed = selectedDuration * 60 - timer;
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Botón de retroceso arriba a la izquierda */}
       <TouchableOpacity
         style={styles.backBtn}
@@ -335,12 +336,8 @@ export default function BreathingExercise() {
         {showCancel && cancelDialog()}
       </View>
       {/* Footer personalizado */}
-      <View style={styles.footerCustom}>
-        <Text style={styles.footerTextCustom}>
-          IHC - Grupo “Interacción Hombre Cachimbas”
-        </Text>
-      </View>
-    </View>
+
+    </SafeAreaView>
   );
 }
 
@@ -348,7 +345,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8fafc",
-    paddingTop: 16,
+    paddingTop: 30,
   },
   backBtn: {
     marginRight: 10,

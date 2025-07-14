@@ -18,46 +18,40 @@ export default function HomeScreen() {
 
   const menuOptions = [
     {
-      title: 'Trivia de Bienestar',
+      title: 'Jugar Trivia Interactiva',
       description: 'Pon a prueba tus conocimientos sobre salud y bienestar',
-      icon: 'brain-outline',
+      icon: 'help-circle-outline',
       route: '/trivia',
-      color: '#6366f1',
     },
     {
-      title: 'Entrenador de Lectura Rápida',
-      description: 'Mejora tu velocidad y comprensión lectora',
+      title: 'Entrenar lectura rápida',
+      description: 'Mejora tu velocidad y comprension lectora',
       icon: 'book-outline',
       route: '/speed-reader',
-      color: '#10b981',
     },
     {
-      title: 'Ejercicio de Respiración',
-      description: 'Relájate con una rutina guiada de respiración',
-      icon: 'body-outline',
+      title: 'Realizar respiración guiada',
+      description: 'Relájate con una rutina de guiada de respiracion',
+      icon: 'pulse-outline',
       route: '/breathing-exercise',
-      color: '#a78bfa',
     },
     {
-      title: 'Mi estado emocional',
-      description: 'Registra cómo te sientes y recibe apoyo',
+      title: 'Ejecutar pausas ergonómicas',
+      description: 'Realiza pausas guiadas para sentirte mejor',
+      icon: 'accessibility-outline',
+      route: '/PausasActivas',
+    },
+    {
+      title: 'Registrar Estado Emocional',
+      description: 'Registra como te sientes actualmente',
       icon: 'happy-outline',
       route: '/emotion-simulator',
-      color: '#4FC3F7',
     },
     {
-      title: 'Práctica de Presentación',
-      description: 'Graba tu exposición y recibe retroalimentación simulada',
+      title: 'Practica de Exposicion Oral',
+      description: 'Mejora tus habilidades para hablar en público y exposicion',
       icon: 'mic-outline',
       route: '/camera',
-      color: '#f59e0b',
-    },
-    {
-      title: 'Pausas Activas',
-      description: 'Ejercicios de estiramiento y descanso visual',
-      icon: 'fitness-outline',
-      route: '/PausasActivas',
-      color: '#4ECDC4',
     },
   ];
 
@@ -82,12 +76,12 @@ export default function HomeScreen() {
                 entering={FadeInUp.delay(200 + index * 100).duration(600)}
               >
                 <TouchableOpacity
-                  style={[styles.menuOption, { borderLeftColor: option.color }]}
+                  style={styles.menuOption}
                   onPress={() => router.push(option.route)}
                   activeOpacity={0.8}
                 >
-                  <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
-                    <Ionicons name={option.icon} size={32} color={option.color} />
+                  <View style={styles.iconContainer}>
+                    <Ionicons name={option.icon} size={32} color={'#5ECBC2'} />
                   </View>
                   <View style={styles.textContainer}>
                     <Text style={styles.optionTitle}>{option.title}</Text>
@@ -100,14 +94,7 @@ export default function HomeScreen() {
           </View>
         </ScrollView>
 
-        <Animated.View
-          entering={FadeInDown.delay(600).duration(800)}
-          style={styles.footer}
-        >
-          <Text style={styles.footerText}>
-            Desarrolla hábitos saludables y mejora tu bienestar
-          </Text>
-        </Animated.View>
+
       </View>
     </SafeAreaView>
   );
@@ -121,7 +108,7 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     paddingHorizontal: 20,
-    paddingTop: 40,
+    paddingTop:40,
   },
   header: {
     alignItems: 'center',
@@ -145,25 +132,27 @@ const styles = StyleSheet.create({
     gap: 16,
   },
   menuOption: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff',
     borderRadius: 16,
     padding: 20,
     flexDirection: 'row',
     alignItems: 'center',
-    borderLeftWidth: 4,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
+    borderLeftWidth: 8,
+    borderLeftColor: '#5ECBC2',
+    borderWidth: 2,
+    borderColor: '#5ECBC2',
+    shadowColor: '#5ECBC2',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
     shadowRadius: 8,
-    elevation: 3,
+    elevation: 4,
+    marginBottom: 8,
   },
   iconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#E0F7F5',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 16,
@@ -173,18 +162,20 @@ const styles = StyleSheet.create({
   },
   optionTitle: {
     fontSize: 18,
-    fontWeight: '600',
-    color: '#1e293b',
+    fontWeight: 'bold',
+    color: '#222',
     marginBottom: 4,
   },
   optionDescription: {
     fontSize: 14,
-    color: '#64748b',
+    color: '#555',
     lineHeight: 20,
   },
   footer: {
+    backgroundColor: '#5ECBC2',
     alignItems: 'center',
     paddingVertical: 20,
+    width: '100%',
   },
   footerText: {
     fontSize: 14,

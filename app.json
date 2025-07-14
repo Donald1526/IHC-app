@@ -1,10 +1,15 @@
 {
   "expo": {
+    "androidNavigationBar": {
+      "visible": "immersive",
+      "barStyle": "dark-content",
+      "backgroundColor": "#5ECBC2"
+    },
     "name": "AplicacionIHC",
     "slug": "AplicacionIHC",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/IconoNuevo.png",
     "scheme": "aplicacionihc",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -18,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/IconoNuevo.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,

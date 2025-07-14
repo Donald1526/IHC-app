@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 
 const EstiramientosScreen = () => {
+  const [helpVisible, setHelpVisible] = useState(false);
   const router = useRouter();
   const [seconds, setSeconds] = useState(60); // Cambiado a 60 segundos (1 minuto)
   const [isRunning, setIsRunning] = useState(false);
@@ -140,8 +141,7 @@ const EstiramientosScreen = () => {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor="#f5f5f5" />
-      
-      {/* Header con botón de retroceso */}
+      {/* Header con botón de retroceso y ayuda */}
       <View style={styles.header}>
         <TouchableOpacity 
           style={styles.backButton} 
@@ -150,6 +150,11 @@ const EstiramientosScreen = () => {
         >
           <Ionicons name="chevron-back" size={24} color="#666" />
         </TouchableOpacity>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color="#666" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       {/* Título del ejercicio actual */}
@@ -249,6 +254,23 @@ const EstiramientosScreen = () => {
         </TouchableOpacity>
 
       </View>
+
+      {/* Modal de ayuda */}
+      {helpVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+            Realiza movimientos lentos y controlados.
+            Respira profundamente durante cada ejercicio.
+            Atento al audio para el cambio de ejercicio.
+            Detente si experimentas cualquier molestia.
+            </Text>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
+              <Text style={{ color: '#666' }}>Entendido</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
     </SafeAreaView>
   );
 };
@@ -259,8 +281,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
   },
   header: {
-    paddingHorizontal: 20,
-    paddingTop: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: 40,
+    paddingHorizontal: 16,
     paddingBottom: 10,
   },
   backButton: {
@@ -278,6 +303,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
+  },
+  headerIcons: {
+    flexDirection: 'row',
+    gap: 15,
   },
   titleContainer: {
     alignItems: 'center',
@@ -437,6 +466,42 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 6,
     elevation: 4,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    width: '80%',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    color: '#333',
+    fontSize: 16,
+    textAlign: 'center',
+    marginBottom: 20,
+    lineHeight: 22,
+  },
+  closeBtn: {
+    backgroundColor: '#f0f0f0',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 8,
   },
 });
 

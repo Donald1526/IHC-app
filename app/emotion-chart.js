@@ -207,7 +207,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   header: {
     flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-    padding: 16, paddingTop: 40, marginBottom: 10,
+    padding: 16, paddingTop: 0, marginBottom: 10,
   },
   title: { fontSize: 20, fontWeight: 'bold', color: colors.primary },
   scrollContainer: { paddingHorizontal: 16 },
