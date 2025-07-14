@@ -1,5 +1,3 @@
-// app/emotion-simulator.js
-
 import React, { useState } from "react";
 import {
   SafeAreaView,
@@ -15,9 +13,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
-const ITEM_MARGIN = 8;
-const NUM_COLUMNS = 3;
-const ITEM_WIDTH = (SCREEN_WIDTH - ITEM_MARGIN * 2 * NUM_COLUMNS) / NUM_COLUMNS;
 
 // Paleta de colores integrada
 const colors = {
@@ -33,12 +28,12 @@ const colors = {
 };
 
 const emojis = [
-  { symbol: "😄", label: "Muy feliz", key: "very_happy" },
-  { symbol: "🙂", label: "Feliz", key: "happy" },
-  { symbol: "😐", label: "Neutral", key: "neutral" },
-  { symbol: "😟", label: "Preocupado", key: "worried" },
-  { symbol: "😡", label: "Molesto", key: "angry" },
-  { symbol: "😴", label: "Cansado", key: "tired" },
+  { symbol: "😄", label: "Muy feliz",   key: "very_happy" },
+  { symbol: "🙂", label: "Feliz",       key: "happy"      },
+  { symbol: "😐", label: "Neutral",     key: "neutral"    },
+  { symbol: "😟", label: "Preocupado",  key: "worried"    },
+  { symbol: "😡", label: "Molesto",     key: "angry"      },
+  { symbol: "😴", label: "Cansado",     key: "tired"      },
 ];
 
 const feedbackText = {
@@ -58,40 +53,67 @@ const resources = [
 
 export default function EmotionSimulator() {
   const [selected, setSelected] = useState(null);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [resourcesVisible, setResourcesVisible] = useState(false);
+  const [confirmVisible, setConfirmVisible] = useState(false);
+  const [helpVisible, setHelpVisible] = useState(false);
   const router = useRouter();
+
   const isCritical = selected === "angry" || selected === "worried";
+  const selectedEmoji = emojis.find((e) => e.key === selected) || {};
+
+  // Función de retroceso: siempre vuelve al index.js (pantalla principal)
+  const handleBack = () => {
+    router.replace("/");
+  };
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
-        {/* Header */}
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={28} color={colors.primary} />
+      {/* Header con botón de retroceder */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={handleBack} hitSlop={{ top: 10, left: 10, right: 10, bottom: 10 }}>
+          <Ionicons name="arrow-back" size={28} color={colors.primary} />
+        </TouchableOpacity>
+        <Text style={styles.title}>Mis Emociones</Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color={colors.primary} />
           </TouchableOpacity>
-          <Text style={styles.title}>Mi estado emocional</Text>
-          <View style={{ width: 28 }} />
+          <TouchableOpacity onPress={() => router.push("/emotion-chart")} style={{ marginLeft: 16 }}>
+            <Ionicons name="stats-chart-outline" size={28} color={colors.primary} />
+          </TouchableOpacity>
         </View>
+      </View>
 
-        {/* Pregunta */}
+      {/* Contenido scrollable */}
+      <ScrollView
+        style={styles.scrollContainer}
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator
+      >
         <Text style={styles.guideText}>¿Cómo te sientes hoy?</Text>
 
-        {/* Grid de emociones */}
-        <View style={styles.grid}>
-          {emojis.map((e) => (
-            <TouchableOpacity
-              key={e.key}
-              style={[
-                styles.emojiButton,
-                selected === e.key && styles.selectedEmoji,
-              ]}
-              onPress={() => setSelected(e.key)}
-            >
-              <Text style={styles.emojiSymbol}>{e.symbol}</Text>
-              <Text style={styles.emojiLabel}>{e.label}</Text>
-            </TouchableOpacity>
-          ))}
+        {/* Emociones en grid 2x3 */}
+        <View style={styles.gridContainer}>
+          <View style={styles.grid}>
+            {emojis.map((e) => (
+              <TouchableOpacity
+                key={e.key}
+                style={[
+                  styles.emojiButton,
+                  selected === e.key && styles.selectedEmoji,
+                ]}
+                onPress={() => setSelected(e.key)}
+              >
+                <Text style={styles.emojiSymbol}>{e.symbol}</Text>
+                <Text style={[
+                  styles.emojiLabel,
+                  selected === e.key && styles.selectedEmojiLabel
+                ]}>
+                  {e.label}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
 
         {/* Feedback inmediato */}
@@ -100,9 +122,7 @@ export default function EmotionSimulator() {
             <View style={styles.iconWrapper}>
               <View style={styles.outerCircle}>
                 <View style={styles.innerCircle}>
-                  <Text style={styles.feedbackEmoji}>
-                    {emojis.find((e) => e.key === selected).symbol}
-                  </Text>
+                  <Text style={styles.feedbackEmoji}>{selectedEmoji.symbol}</Text>
                 </View>
               </View>
             </View>
@@ -113,34 +133,59 @@ export default function EmotionSimulator() {
           </View>
         )}
 
-        {/* Botón principal */}
-        {selected && (
+        {/* Botones de acción */}
+        {selected && !isCritical && (
           <TouchableOpacity
             style={styles.actionBtn}
-            onPress={() => {
-              if (isCritical) {
-                // lógica de llamada a consejería
-              } else {
-                setModalVisible(true);
-              }
-            }}
+            onPress={() => setConfirmVisible(true)}
           >
-            <Text style={styles.actionText}>
-              {isCritical ? "Llamar a consejería" : "Ver recursos"}
-            </Text>
+            <Text style={styles.actionText}>Registrar emoción</Text>
           </TouchableOpacity>
+        )}
+
+        {selected && isCritical && (
+          <>
+            <TouchableOpacity
+              style={[styles.actionBtn, { marginBottom: 8 }]}
+              onPress={() => setResourcesVisible(true)}
+            >
+              <Text style={styles.actionText}>Recursos</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.actionBtn}
+              onPress={() => setConfirmVisible(true)}
+            >
+              <Text style={styles.actionText}>Registrar emoción</Text>
+            </TouchableOpacity>
+          </>
         )}
       </ScrollView>
 
+      {/* Modal de ayuda */}
+      <Modal visible={helpVisible} transparent animationType="fade">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>
+              Para registrar tu emoción, elige la opción que mejor refleje cómo te sientes en este momento. Si tu emoción es intensa o negativa, considera leer la recomendación o acceder a los recursos antes de continuar. Luego, presiona "Registrar emoción", tu registro se guardará y podrás consultarlo luego pulsando el gráfico al costado del título.
+            </Text>
+            <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
+              <Text style={{ color: colors.textSecondary }}>Entendido</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
       {/* Modal de recursos */}
-      <Modal visible={modalVisible} transparent animationType="slide">
+      <Modal visible={resourcesVisible} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>Recursos</Text>
             <ScrollView style={{ marginBottom: 12 }}>
               {resources.map((r) => (
                 <TouchableOpacity key={r.label} style={styles.resourceItem}>
-                  <Text style={styles.resourceText}>{r.icon} {r.label}</Text>
+                  <Text style={styles.resourceText}>
+                    {r.icon} {r.label}
+                  </Text>
                 </TouchableOpacity>
               ))}
             </ScrollView>
@@ -149,9 +194,37 @@ export default function EmotionSimulator() {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.closeBtn}
-              onPress={() => setModalVisible(false)}
+              onPress={() => setResourcesVisible(false)}
             >
               <Text style={{ color: colors.textSecondary }}>Cerrar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal de confirmación */}
+      <Modal visible={confirmVisible} transparent animationType="slide">
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Confirmar registro</Text>
+            <Text style={{ textAlign: "center", marginVertical: 16 }}>
+              Vas a registrar: {selectedEmoji.symbol} {selectedEmoji.label}
+            </Text>
+            <TouchableOpacity
+              style={styles.footerBtn}
+              onPress={() => {
+                // Lógica para guardar el registro
+                setConfirmVisible(false);
+                setSelected(null);
+              }}
+            >
+              <Text style={styles.footerText}>Confirmar</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.closeBtn}
+              onPress={() => setConfirmVisible(false)}
+            >
+              <Text style={{ color: colors.textSecondary }}>Cancelar</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -170,11 +243,23 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 16,
+    paddingTop: 40,
+    marginBottom: 20,
   },
   title: {
     color: colors.primary,
     fontSize: 20,
     fontWeight: "bold",
+  },
+  headerIcons: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  scrollContainer: {
+    flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 20,
   },
   guideText: {
     fontSize: 16,
@@ -182,31 +267,44 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: colors.textSecondary,
   },
+  gridContainer: {
+    paddingHorizontal: 16,
+    marginBottom: 16,
+  },
   grid: {
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "space-evenly",
-    paddingHorizontal: ITEM_MARGIN,
+    justifyContent: "space-between",
   },
   emojiButton: {
-    flexBasis: ITEM_WIDTH,
-    margin: ITEM_MARGIN,
+    width: (SCREEN_WIDTH - 48) / 2,
+    marginBottom: 16,
     alignItems: "center",
-    paddingVertical: 12,
+    paddingVertical: 20,
+    paddingHorizontal: 12,
     borderRadius: 12,
     backgroundColor: colors.surface,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 3,
   },
   selectedEmoji: {
     backgroundColor: colors.primary,
   },
   emojiSymbol: {
-    fontSize: 32,
+    fontSize: 36,
+    marginBottom: 8,
   },
   emojiLabel: {
-    marginTop: 4,
-    fontSize: 12,
+    fontSize: 14,
     textAlign: "center",
     color: colors.textPrimary,
+    fontWeight: "500",
+  },
+  selectedEmojiLabel: {
+    color: colors.surface,
   },
   feedbackCard: {
     alignItems: "center",
@@ -255,7 +353,8 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 12,
     alignItems: "center",
-    margin: 16,
+    marginHorizontal: 16,
+    marginVertical: 8,
   },
   actionText: {
     color: colors.surface,
@@ -279,6 +378,11 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 12,
     color: colors.primary,
+  },
+  modalText: {
+    fontSize: 14,
+    marginBottom: 16,
+    color: colors.textPrimary,
   },
   resourceItem: {
     padding: 12,
