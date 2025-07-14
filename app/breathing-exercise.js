@@ -7,6 +7,7 @@ import {
   Animated,
   Easing,
   Image,
+  Platform,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
@@ -19,6 +20,7 @@ const INHALE_DURATION = 4000; // ms
 const EXHALE_DURATION = 4000; // ms
 const DURATIONS = [1, 2, 3, 5]; // minutos disponibles
 const screenWidth = Dimensions.get("window").width;
+const MAIN_COLOR = "#5ECBC2";
 
 export default function BreathingExercise() {
   const [started, setStarted] = useState(false);
@@ -35,6 +37,7 @@ export default function BreathingExercise() {
   const backgroundMusic = useRef(null);
   const inhaleSound = useRef(null);
   const exhaleSound = useRef(null);
+  const finishSound = useRef(null);
 
   useEffect(() => {
     if (started && timer > 0) {
@@ -47,6 +50,7 @@ export default function BreathingExercise() {
       setShowFeedback(true);
       setStarted(false);
       stopBackgroundMusic();
+      playFinishSound();
     }
   }, [started, timer]);
 
@@ -148,6 +152,21 @@ export default function BreathingExercise() {
     }
   };
 
+  // AUDIO: Sonido de finalización
+  const playFinishSound = async () => {
+    try {
+      if (!finishSound.current) {
+        finishSound.current = new Audio.Sound();
+        await finishSound.current.loadAsync(
+          require("../assets/audio/finish.mp3")
+        );
+      }
+      await finishSound.current.replayAsync();
+    } catch (e) {
+      // Si no hay audio, simplemente no suena
+    }
+  };
+
   // Al iniciar, siempre comienza con 'inhale'
   const handleStart = () => {
     setStarted(true);
@@ -195,13 +214,15 @@ export default function BreathingExercise() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headerRow}>
-        <TouchableOpacity
-          style={styles.backBtn}
-          onPress={() => router.replace("/")}
-        >
-          <Ionicons name="arrow-back" size={28} color="#a78bfa" />
-        </TouchableOpacity>
+      {/* Botón de retroceso arriba a la izquierda */}
+      <TouchableOpacity
+        style={styles.backBtn}
+        onPress={() => router.replace("/")}
+      >
+        <Ionicons name="arrow-back" size={28} color={MAIN_COLOR} />
+      </TouchableOpacity>
+      {/* Header centrado y estilizado */}
+      <View style={styles.headerBox}>
         <Text style={styles.title}>Ejercicio de Respiración</Text>
       </View>
       <Text style={styles.subtitle}>
@@ -209,7 +230,14 @@ export default function BreathingExercise() {
       </Text>
       <View style={styles.centerContentAdjusted}>
         <Animated.View
-          style={[styles.circle, { transform: [{ scale: scaleAnim }] }]}
+          style={[
+            styles.circle,
+            {
+              backgroundColor: "rgba(94,203,194,0.18)",
+              borderColor: MAIN_COLOR,
+            },
+            { transform: [{ scale: scaleAnim }] },
+          ]}
         >
           <Image
             source={require("../assets/images/meditation.png")}
@@ -217,11 +245,15 @@ export default function BreathingExercise() {
           />
         </Animated.View>
         <Text style={styles.phaseText}>
-          {started
-            ? phase === "inhale"
-              ? "Inhale..."
-              : "Exhale..."
-            : "Listo para comenzar"}
+          {started ? (
+            phase === "inhale" ? (
+              "Inhale..."
+            ) : (
+              "Exhale..."
+            )
+          ) : (
+            <Text style={{ color: MAIN_COLOR }}>Listo para comenzar</Text>
+          )}
         </Text>
         {/* Barra de progreso y selectores/contadores ahora arriba del botón de empezar */}
         <View style={styles.bottomBarRow}>
@@ -230,7 +262,10 @@ export default function BreathingExercise() {
             {(!started && !showFeedback) || showFeedback ? (
               <Picker
                 selectedValue={selectedDuration}
-                style={styles.pickerOnly}
+                style={[
+                  styles.pickerOnly,
+                  { borderColor: MAIN_COLOR, color: MAIN_COLOR },
+                ]}
                 onValueChange={(itemValue) => setSelectedDuration(itemValue)}
                 mode="dropdown"
               >
@@ -239,30 +274,40 @@ export default function BreathingExercise() {
                 ))}
               </Picker>
             ) : (
-              <Text style={styles.elapsedText}>{`${Math.floor(elapsed / 60)}:${(
-                elapsed % 60
-              )
+              <Text
+                style={[styles.elapsedText, { color: MAIN_COLOR }]}
+              >{`${Math.floor(elapsed / 60)}:${(elapsed % 60)
                 .toString()
                 .padStart(2, "0")}`}</Text>
             )}
           </View>
           {/* Centro: barra de progreso */}
           <View style={styles.progressBarContainer}>
-            <View style={styles.progressBarBg} />
             <View
-              style={[styles.progressBarFill, { width: `${progress * 100}%` }]}
+              style={[styles.progressBarBg, { backgroundColor: "#b2ece7" }]}
+            />
+            <View
+              style={[
+                styles.progressBarFill,
+                { backgroundColor: MAIN_COLOR, width: `${progress * 100}%` },
+              ]}
             />
           </View>
           {/* Derecha: tiempo total */}
           <View style={styles.rightBox}>
-            <Text style={styles.totalText}>{`${selectedDuration}:00`}</Text>
+            <Text
+              style={[styles.totalText, { color: MAIN_COLOR }]}
+            >{`${selectedDuration}:00`}</Text>
           </View>
         </View>
         {/* Espacio fijo para botón de iniciar, feedback y cancelar */}
         <View style={styles.feedbackBtnBlock}>
           {showFeedback ? (
             <>
-              <TouchableOpacity style={styles.playBtn} onPress={handleStart}>
+              <TouchableOpacity
+                style={styles.playBtnFloating}
+                onPress={handleStart}
+              >
                 <Ionicons name="play" size={36} color="#fff" />
               </TouchableOpacity>
               <View style={styles.feedbackBoxImproved}>
@@ -276,15 +321,24 @@ export default function BreathingExercise() {
               style={styles.cancelBtnStyled}
               onPress={handleCancel}
             >
-              <Ionicons name="close" size={36} color="#a78bfa" />
+              <Ionicons name="close" size={36} color={MAIN_COLOR} />
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity style={styles.playBtn} onPress={handleStart}>
+            <TouchableOpacity
+              style={styles.playBtnFloating}
+              onPress={handleStart}
+            >
               <Ionicons name="play" size={36} color="#fff" />
             </TouchableOpacity>
           )}
         </View>
         {showCancel && cancelDialog()}
+      </View>
+      {/* Footer personalizado */}
+      <View style={styles.footerCustom}>
+        <Text style={styles.footerTextCustom}>
+          IHC - Grupo “Interacción Hombre Cachimbas”
+        </Text>
       </View>
     </View>
   );
@@ -294,30 +348,38 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f8fafc",
-    paddingTop: 40,
-  },
-  headerRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 0,
-    marginTop: 0,
+    paddingTop: 16,
   },
   backBtn: {
     marginRight: 10,
     backgroundColor: "transparent",
     padding: 4,
   },
+  headerBox: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: MAIN_COLOR,
+    borderRadius: 25,
+    marginHorizontal: 32,
+    marginTop: 8,
+    marginBottom: 12,
+    paddingVertical: 10,
+    shadowColor: MAIN_COLOR,
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.45,
+    shadowRadius: 18,
+    elevation: 18,
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#a78bfa",
+    color: "#fff",
     textAlign: "center",
-    flex: 1,
+    letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 16,
-    color: "#64748b",
+    color: "#111",
     textAlign: "center",
     marginBottom: 24,
     marginTop: 8,
@@ -337,12 +399,12 @@ const styles = StyleSheet.create({
     width: 180,
     height: 180,
     borderRadius: 90,
-    backgroundColor: "#ede9fe",
+    backgroundColor: MAIN_COLOR,
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 24,
     borderWidth: 2,
-    borderColor: "#a78bfa",
+    borderColor: MAIN_COLOR,
   },
   circularImage: {
     width: 140,
@@ -355,17 +417,18 @@ const styles = StyleSheet.create({
   },
   phaseText: {
     fontSize: 22,
-    color: "#a78bfa",
+    color: MAIN_COLOR,
     fontWeight: "600",
     marginBottom: 8,
+    textAlign: "center",
   },
   timer: {
     fontSize: 20,
     color: "#64748b",
     marginBottom: 16,
   },
-  playBtn: {
-    backgroundColor: "#a78bfa",
+  playBtnFloating: {
+    backgroundColor: MAIN_COLOR,
     borderRadius: 40,
     width: 64,
     height: 64,
@@ -373,18 +436,16 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 8,
     marginBottom: 8,
-    elevation: 3,
-  },
-  cancelBtnBig: {
-    backgroundColor: "#ede9fe",
-    borderRadius: 40,
-    width: 64,
-    height: 64,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 8,
-    marginBottom: 8,
-    elevation: 3,
+    elevation: 18,
+    shadowColor: MAIN_COLOR,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.55,
+    shadowRadius: 24,
+    ...Platform.select({
+      android: {
+        elevation: 24,
+      },
+    }),
   },
   cancelBtnStyled: {
     backgroundColor: "#fff",
@@ -395,9 +456,18 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 8,
     marginBottom: 8,
-    elevation: 3,
+    elevation: 18,
     borderWidth: 2,
-    borderColor: "#ede9fe",
+    borderColor: MAIN_COLOR,
+    shadowColor: MAIN_COLOR,
+    shadowOffset: { width: 0, height: 12 },
+    shadowOpacity: 0.55,
+    shadowRadius: 24,
+    ...Platform.select({
+      android: {
+        elevation: 24,
+      },
+    }),
   },
   feedbackBoxImproved: {
     backgroundColor: "#a7f3d0",
@@ -408,19 +478,15 @@ const styles = StyleSheet.create({
     maxWidth: 320,
     alignSelf: "center",
     width: "90%",
-    shadowColor: "#000",
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-  },
-  feedbackText: {
-    fontSize: 18,
-    color: "#047857",
-    fontWeight: "bold",
-    textAlign: "center",
+    shadowColor: "#047857",
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.35,
+    shadowRadius: 18,
+    elevation: 16,
   },
   feedbackTextSmall: {
     fontSize: 15,
-    color: "#047857",
+    color: "#065f46",
     fontWeight: "bold",
     textAlign: "center",
   },
@@ -444,14 +510,14 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   cancelBtn: {
-    backgroundColor: "#a78bfa",
+    backgroundColor: MAIN_COLOR,
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 24,
     marginHorizontal: 8,
   },
   cancelBtnOutline: {
-    borderColor: "#a78bfa",
+    borderColor: MAIN_COLOR,
     borderWidth: 1,
     borderRadius: 8,
     paddingVertical: 8,
@@ -521,11 +587,11 @@ const styles = StyleSheet.create({
   pickerOnly: {
     width: 48,
     height: 36,
-    color: "#7c3aed",
-    backgroundColor: "#ede9fe",
+    color: MAIN_COLOR,
+    backgroundColor: "#e0f7f5",
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: "#a78bfa",
+    borderColor: MAIN_COLOR,
     fontSize: 15,
     marginLeft: 0,
     marginRight: 0,
@@ -533,12 +599,12 @@ const styles = StyleSheet.create({
   },
   elapsedText: {
     fontSize: 16,
-    color: "#a78bfa",
+    color: MAIN_COLOR,
     fontWeight: "bold",
   },
   totalText: {
     fontSize: 16,
-    color: "#64748b",
+    color: MAIN_COLOR,
     fontWeight: "bold",
   },
   progressBarContainer: {
@@ -552,7 +618,7 @@ const styles = StyleSheet.create({
   },
   progressBarBg: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "#ede9fe",
+    backgroundColor: "#b2ece7",
     borderRadius: 6,
   },
   progressBarFill: {
@@ -560,15 +626,34 @@ const styles = StyleSheet.create({
     left: 0,
     top: 0,
     bottom: 0,
-    backgroundColor: "#a78bfa",
+    backgroundColor: MAIN_COLOR,
     borderRadius: 6,
     height: 8,
   },
   feedbackBtnBlock: {
-    minHeight: 90, // Altura suficiente para botón + feedback
+    minHeight: 90,
     alignItems: "center",
     justifyContent: "flex-start",
     width: "100%",
+  },
+  footerCustom: {
+    width: "100%",
+    backgroundColor: MAIN_COLOR,
+    paddingVertical: 14,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 12,
+    shadowColor: MAIN_COLOR,
+    shadowOffset: { width: 0, height: -4 },
+    shadowOpacity: 0.18,
+    shadowRadius: 8,
+    elevation: 8,
+  },
+  footerTextCustom: {
+    color: "#111",
+    fontSize: 15,
+    fontWeight: "bold",
+    letterSpacing: 0.5,
   },
 });
 // Para que el audio funcione, sube tus archivos mp3 a assets/audio/ con los nombres:
