@@ -4,7 +4,7 @@ import { CameraView, useCameraPermissions, useMicrophonePermissions } from 'expo
 import * as MediaLibrary from 'expo-media-library';
 import { useRouter } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
-import { Alert, Animated, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Animated, SafeAreaView, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native';
 
 export default function CameraScreen() {
   const router = useRouter();
@@ -226,100 +226,95 @@ export default function CameraScreen() {
 
   return (
     <SafeAreaView style={styles.cameraScreenContainer}>
-      <View style={styles.backButtonOuterContainer}>
-        <TouchableOpacity style={styles.backButtonInnerContainer} onPress={() => router.replace('/')}>
-          <FontAwesome name="arrow-left" size={24} color="black" />
-        </TouchableOpacity>
-      </View>
-
-      <View style={styles.headerContainer}>
-        <View style={styles.titleBubble}>
-            <Text style={styles.titleText}>Practica de Exposicion</Text>
+        <View style={styles.backButtonOuterContainer}>
+            <TouchableOpacity style={styles.backButtonInnerContainer} onPress={() => router.back()}>
+                <FontAwesome name="arrow-left" size={24} color="black" />
+            </TouchableOpacity>
         </View>
-        <Text style={styles.subtitleText}>
-            Practica tu presentación grabándose y recibe retroalimentación
-        </Text>
+        <View style={styles.headerContainer}>
+          <View style={styles.titleBubble}>
+              <Text style={styles.titleText}>Practica de Exposicion</Text>
+          </View>
+          <Text style={styles.subtitleText}>
+              Practica tu presentación grabándose y recibe retroalimentación
+          </Text>
+        </View>
         <View style={styles.headerIcons}>
           <TouchableOpacity onPress={() => setHelpVisible(true)}>
-            <Ionicons name="help-circle-outline" size={28} color="#5C3893" />
+            <Ionicons name="help-circle-outline" size={50} color="#5C3893" />
           </TouchableOpacity>
         </View>
-      </View>
+      <ScrollView showsVerticalScrollIndicator={true} contentContainerStyle={{flexGrow: 1}}>
 
-      <View style={styles.cameraPreviewAndControls}>
-        <CameraView
-          ref={cameraRef}
-          style={styles.cameraView}
-          facing="front"
-          mode="video"
-          onCameraReady={() => console.log('Camera ready!')}
-        />
-      </View>
-
-      <View style={styles.recordingStatusAndTimerContainer}>
-        <View style={styles.micProgressContainer}>
-          <FontAwesome name="microphone" size={24} color="#DDC7F9" />
-          <View style={styles.micProgressBarBackground}>
-            <Animated.View
-              style={[
-                styles.micProgressBarFill,
-                {
-                  width: volumeAnim.interpolate({
-                    inputRange: [0, 1],
-                    outputRange: ['5%', '100%'],
-                    extrapolate: 'clamp',
-                  }),
-                },
-              ]}
-            />
+        <View style={styles.cameraPreviewAndControls}>
+          <CameraView
+            ref={cameraRef}
+            style={styles.cameraView}
+            facing="front"
+            mode="video"
+            onCameraReady={() => console.log('Camera ready!')}
+          />
+        </View>
+        <View style={styles.recordingStatusAndTimerContainer}>
+          <View style={styles.micProgressContainer}>
+            <FontAwesome name="microphone" size={24} color="#DDC7F9" />
+            <View style={styles.micProgressBarBackground}>
+              <Animated.View
+                style={[
+                  styles.micProgressBarFill,
+                  {
+                    width: volumeAnim.interpolate({
+                      inputRange: [0, 1],
+                      outputRange: ['5%', '100%'],
+                      extrapolate: 'clamp',
+                    }),
+                  },
+                ]}
+              />
+            </View>
+          </View>
+          <Text style={styles.timerText}>{formatTime(recordingDuration)}</Text>
+        </View>
+        <View style={styles.bottomControlsContainer}>
+            <TouchableOpacity style={styles.controlButton} onPress={handleReset} disabled={isRecording}>
+                <FontAwesome name="refresh" size={24} color={isRecording ? 'lightgray' : 'gray'} />
+                <Text style={[styles.controlButtonText, isRecording && {color: 'lightgray'}]}>Resetear</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                style={[styles.recordMainButton, isRecording ? styles.recordMainButtonActive : {}]}
+                onPress={isRecording ? stopRecording : startRecording}
+                disabled={!cameraPermission?.granted || !microphonePermission?.granted}
+            >
+                <View style={[
+                    styles.recordMainButtonInner,
+                    isRecording && styles.recordMainButtonInnerActive
+                ]} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.controlButton} onPress={handleFinalize} disabled={isRecording && !videoUri}>
+                <FontAwesome name="check" size={24} color={isRecording && !videoUri ? 'lightgray' : 'gray'} />
+                <Text style={[styles.controlButtonText, isRecording && !videoUri && {color: 'lightgray'}]}>Finalizar</Text>
+            </TouchableOpacity>
+        </View>
+      </ScrollView>
+      {helpVisible && (
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalTitle}>Ayuda - Práctica de Exposición</Text>
+            <Text style={styles.modalText}>
+              • Presiona el botón rojo para comenzar a grabar tu presentación.{"\n\n"}• Este caso de uso te permitira grabar y practicar su presentación. 
+              Despues de la grabacion podras recibir retroalimentación sobre su desempeño, 
+              lo que le ayuda a mejorar su fluidez, tono y consistencia al hablar.
+            </Text>
+            <TouchableOpacity 
+              style={styles.closeBtn} 
+              onPress={() => setHelpVisible(false)}
+            >
+              <Text style={styles.closeBtnText}>Entendido</Text>
+            </TouchableOpacity>
           </View>
         </View>
-        <Text style={styles.timerText}>{formatTime(recordingDuration)}</Text>
-      </View>
-              
-      <View style={styles.bottomControlsContainer}>
-          <TouchableOpacity style={styles.controlButton} onPress={handleReset} disabled={isRecording}>
-              <FontAwesome name="refresh" size={24} color={isRecording ? 'lightgray' : 'gray'} />
-              <Text style={[styles.controlButtonText, isRecording && {color: 'lightgray'}]}>Resetear</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-              style={[styles.recordMainButton, isRecording ? styles.recordMainButtonActive : {}]}
-              onPress={isRecording ? stopRecording : startRecording}
-              disabled={!cameraPermission?.granted || !microphonePermission?.granted}
-          >
-              <View style={[
-                  styles.recordMainButtonInner,
-                  isRecording && styles.recordMainButtonInnerActive
-              ]} />
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.controlButton} onPress={handleFinalize} disabled={isRecording && !videoUri}>
-              <FontAwesome name="check" size={24} color={isRecording && !videoUri ? 'lightgray' : 'gray'} />
-              <Text style={[styles.controlButtonText, isRecording && !videoUri && {color: 'lightgray'}]}>Finalizar</Text>
-          </TouchableOpacity>
-      </View>
-    
-    {helpVisible && (
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContent}>
-      <Text style={styles.modalTitle}>Ayuda - Práctica de Exposición</Text>
-      <Text style={styles.modalText}>
-        • Presiona el botón rojo para comenzar a grabar tu presentación.
-        {"\n\n"}• Este caso de uso te permitira grabar y practicar su presentación. 
-        Despues de la grabacion podras recibir retroalimentación sobre su desempeño, 
-        lo que le ayuda a mejorar su fluidez, tono y consistencia al hablar.
-      </Text>
-      <TouchableOpacity 
-        style={styles.closeBtn} 
-        onPress={() => setHelpVisible(false)}
-      >
-        <Text style={styles.closeBtnText}>Entendido</Text>
-      </TouchableOpacity>
-    </View>
-  </View>
-  )}
-  </SafeAreaView>
+      )}
+    </SafeAreaView>
   );
 }
 
@@ -352,6 +347,7 @@ const styles = StyleSheet.create({
   cameraScreenContainer: {
     flex: 1,
     backgroundColor: 'white',
+    paddingTop: 40,
   },
   backButtonOuterContainer: {
     position: 'absolute',
@@ -372,13 +368,14 @@ const styles = StyleSheet.create({
   headerContainer: {
     alignItems: 'center',
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 10,
   },
   headerIcons: {
   position: 'absolute', 
-  right: 20,           
-  top: 20,             
-  zIndex: 10,          
+  right: 10,           
+  top: 45,             
+  zIndex: 10, 
+           
 },
   titleBubble: {
     backgroundColor: '#DDC7F9',
@@ -427,8 +424,8 @@ const styles = StyleSheet.create({
   },
   recordingStatusAndTimerContainer: {
     alignItems: 'center',
-    marginTop: 30,
-    marginBottom: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   micProgressContainer: {
     flexDirection: 'row',
@@ -469,8 +466,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     width: '100%',
-    marginTop: 40,
-    marginBottom: 40,
+    marginTop: 0,
+    marginBottom: 70,
   },
   controlButton: {
     alignItems: 'center',

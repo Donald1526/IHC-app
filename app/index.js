@@ -69,29 +69,29 @@ export default function HomeScreen() {
         </Animated.View>
 
         <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={true}>
-          <View style={styles.menuContainer}>
-            {menuOptions.map((option, index) => (
-              <Animated.View
-                key={option.title}
-                entering={FadeInUp.delay(200 + index * 100).duration(600)}
-              >
-                <TouchableOpacity
+        <View style={styles.menuContainer}>
+          {menuOptions.map((option, index) => (
+            <Animated.View
+              key={option.title}
+              entering={FadeInUp.delay(200 + index * 100).duration(600)}
+            >
+              <TouchableOpacity
                   style={styles.menuOption}
-                  onPress={() => router.push(option.route)}
-                  activeOpacity={0.8}
-                >
+                onPress={() => router.push(option.route)}
+                activeOpacity={0.8}
+              >
                   <View style={styles.iconContainer}>
                     <Ionicons name={option.icon} size={32} color={'#5ECBC2'} />
-                  </View>
-                  <View style={styles.textContainer}>
-                    <Text style={styles.optionTitle}>{option.title}</Text>
-                    <Text style={styles.optionDescription}>{option.description}</Text>
-                  </View>
-                  <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
-                </TouchableOpacity>
-              </Animated.View>
-            ))}
-          </View>
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.optionTitle}>{option.title}</Text>
+                  <Text style={styles.optionDescription}>{option.description}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
+              </TouchableOpacity>
+            </Animated.View>
+          ))}
+        </View>
         </ScrollView>
 
 

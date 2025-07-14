@@ -1,12 +1,8 @@
 {
   "expo": {
-    "androidNavigationBar": {
-      "visible": "immersive",
-      "barStyle": "dark-content",
-      "backgroundColor": "#5ECBC2"
-    },
-    "name": "AplicacionIHC",
-    "slug": "AplicacionIHC",
+
+    "name": "UniBalance",
+    "slug": "UniBalance",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/IconoNuevo.png",
@@ -36,6 +32,9 @@
         "android.permission.ACCESS_MEDIA_LOCATION"
       ]
     },
+    "androidNavigationBar": {
+      "backgroundColor": "#5ECBC2"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -59,7 +58,8 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
-      ]
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true

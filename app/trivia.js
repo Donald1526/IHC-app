@@ -266,7 +266,7 @@ export default function TriviaScreen() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalText}>
-              Aquí encontrarás información de ayuda sobre esta pantalla. Puedes personalizar este texto más adelante.
+              Pon a pruebas tus conocimientos sobre bienestar y salud, Escoge un tema y responde las preguntas.
             </Text>
             <TouchableOpacity style={styles.closeBtn} onPress={() => setHelpVisible(false)}>
               <Text style={{ color: '#1e293b' }}>Entendido</Text>
