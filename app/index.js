@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
@@ -73,29 +74,31 @@ export default function HomeScreen() {
           </Text>
         </Animated.View>
 
-        <View style={styles.menuContainer}>
-          {menuOptions.map((option, index) => (
-            <Animated.View
-              key={option.title}
-              entering={FadeInUp.delay(200 + index * 100).duration(600)}
-            >
-              <TouchableOpacity
-                style={[styles.menuOption, { borderLeftColor: option.color }]}
-                onPress={() => router.push(option.route)}
-                activeOpacity={0.8}
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={true}>
+          <View style={styles.menuContainer}>
+            {menuOptions.map((option, index) => (
+              <Animated.View
+                key={option.title}
+                entering={FadeInUp.delay(200 + index * 100).duration(600)}
               >
-                <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
-                  <Ionicons name={option.icon} size={32} color={option.color} />
-                </View>
-                <View style={styles.textContainer}>
-                  <Text style={styles.optionTitle}>{option.title}</Text>
-                  <Text style={styles.optionDescription}>{option.description}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
-              </TouchableOpacity>
-            </Animated.View>
-          ))}
-        </View>
+                <TouchableOpacity
+                  style={[styles.menuOption, { borderLeftColor: option.color }]}
+                  onPress={() => router.push(option.route)}
+                  activeOpacity={0.8}
+                >
+                  <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
+                    <Ionicons name={option.icon} size={32} color={option.color} />
+                  </View>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.optionTitle}>{option.title}</Text>
+                    <Text style={styles.optionDescription}>{option.description}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
+                </TouchableOpacity>
+              </Animated.View>
+            ))}
+          </View>
+        </ScrollView>
 
         <Animated.View
           entering={FadeInDown.delay(600).duration(800)}
