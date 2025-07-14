@@ -1,4 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { CameraView, useCameraPermissions, useMicrophonePermissions } from 'expo-camera';
 import * as MediaLibrary from 'expo-media-library';
 import { useRouter } from 'expo-router';
@@ -18,6 +19,7 @@ export default function CameraScreen() {
   const [recordingDuration, setRecordingDuration] = useState(0);
   const intervalRef = useRef(null);
   const lastVolumeRef = useRef(0.5);
+  const [helpVisible, setHelpVisible] = useState(false);
 
   useEffect(() => {
     requestAllPermissions();
@@ -237,6 +239,11 @@ export default function CameraScreen() {
         <Text style={styles.subtitleText}>
             Practica tu presentación grabándose y recibe retroalimentación
         </Text>
+        <View style={styles.headerIcons}>
+          <TouchableOpacity onPress={() => setHelpVisible(true)}>
+            <Ionicons name="help-circle-outline" size={28} color="#5C3893" />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.cameraPreviewAndControls}>
@@ -292,7 +299,27 @@ export default function CameraScreen() {
               <Text style={[styles.controlButtonText, isRecording && !videoUri && {color: 'lightgray'}]}>Finalizar</Text>
           </TouchableOpacity>
       </View>
-    </SafeAreaView>
+    
+    {helpVisible && (
+  <View style={styles.modalOverlay}>
+    <View style={styles.modalContent}>
+      <Text style={styles.modalTitle}>Ayuda - Práctica de Exposición</Text>
+      <Text style={styles.modalText}>
+        • Presiona el botón rojo para comenzar a grabar tu presentación.
+        {"\n\n"}• Este caso de uso te permitira grabar y practicar su presentación. 
+        Despues de la grabacion podras recibir retroalimentación sobre su desempeño, 
+        lo que le ayuda a mejorar su fluidez, tono y consistencia al hablar.
+      </Text>
+      <TouchableOpacity 
+        style={styles.closeBtn} 
+        onPress={() => setHelpVisible(false)}
+      >
+        <Text style={styles.closeBtnText}>Entendido</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+  )}
+  </SafeAreaView>
   );
 }
 
@@ -347,6 +374,12 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  headerIcons: {
+  position: 'absolute', 
+  right: 20,           
+  top: 20,             
+  zIndex: 10,          
+},
   titleBubble: {
     backgroundColor: '#DDC7F9',
     paddingVertical: 8,
@@ -478,5 +511,52 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     width: 30,
     height: 30,
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center', 
+    zIndex: 1000,
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    padding: 15,
+    borderRadius: 12,
+    width: 280, 
+    maxWidth: '80%',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#5C3893',
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modalText: {
+    fontSize: 14,
+    color: '#555',
+    lineHeight: 22,
+    marginBottom: 20,
+  },
+  closeBtn: {
+    backgroundColor: '#DDC7F9',
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  closeBtnText: {
+    color: '#5C3893',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
