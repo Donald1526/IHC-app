@@ -7,6 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  ScrollView,
 } from 'react-native';
 import Animated, { FadeInDown, FadeInUp } from 'react-native-reanimated';
 
@@ -31,53 +32,76 @@ export default function HomeScreen() {
       color: '#10b981',
     },
     {
+      title: 'Ejercicio de Respiración',
+      description: 'Relájate con una rutina guiada de respiración',
+      icon: 'body-outline',
+      route: '/breathing-exercise',
+      color: '#a78bfa',
+    },
+    {
+      title: 'Mi estado emocional',
+      description: 'Registra cómo te sientes y recibe apoyo',
+      icon: 'happy-outline',
+      route: '/emotion-simulator',
+      color: '#4FC3F7',
+    },
+    {
       title: 'Práctica de Presentación',
       description: 'Graba tu exposición y recibe retroalimentación simulada',
       icon: 'mic-outline',
       route: '/camera',
       color: '#f59e0b',
     },
+    {
+      title: 'Pausas Activas',
+      description: 'Ejercicios de estiramiento y descanso visual',
+      icon: 'fitness-outline',
+      route: '/PausasActivas',
+      color: '#4ECDC4',
+    },
   ];
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.content}>
-        <Animated.View 
-          entering={FadeInUp.duration(800)} 
+        <Animated.View
+          entering={FadeInUp.duration(800)}
           style={styles.header}
         >
-          <Text style={styles.title}>Bienestar Mental</Text>
+          <Text style={styles.title}>UniBalance</Text>
           <Text style={styles.subtitle}>
             Herramientas para mejorar tu bienestar mental y cognitivo
           </Text>
         </Animated.View>
 
-        <View style={styles.menuContainer}>
-          {menuOptions.map((option, index) => (
-            <Animated.View
-              key={option.title}
-              entering={FadeInUp.delay(200 + index * 100).duration(600)}
-            >
-              <TouchableOpacity
-                style={[styles.menuOption, { borderLeftColor: option.color }]}
-                onPress={() => router.push(option.route)}
-                activeOpacity={0.8}
+        <ScrollView style={{ flex: 1 }} contentContainerStyle={{ paddingBottom: 20 }} showsVerticalScrollIndicator={true}>
+          <View style={styles.menuContainer}>
+            {menuOptions.map((option, index) => (
+              <Animated.View
+                key={option.title}
+                entering={FadeInUp.delay(200 + index * 100).duration(600)}
               >
-                <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
-                  <Ionicons name={option.icon} size={32} color={option.color} />
-                </View>
-                <View style={styles.textContainer}>
-                  <Text style={styles.optionTitle}>{option.title}</Text>
-                  <Text style={styles.optionDescription}>{option.description}</Text>
-                </View>
-                <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
-              </TouchableOpacity>
-            </Animated.View>
-          ))}
-        </View>
+                <TouchableOpacity
+                  style={[styles.menuOption, { borderLeftColor: option.color }]}
+                  onPress={() => router.push(option.route)}
+                  activeOpacity={0.8}
+                >
+                  <View style={[styles.iconContainer, { backgroundColor: option.color + '20' }]}>
+                    <Ionicons name={option.icon} size={32} color={option.color} />
+                  </View>
+                  <View style={styles.textContainer}>
+                    <Text style={styles.optionTitle}>{option.title}</Text>
+                    <Text style={styles.optionDescription}>{option.description}</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={24} color="#9ca3af" />
+                </TouchableOpacity>
+              </Animated.View>
+            ))}
+          </View>
+        </ScrollView>
 
-        <Animated.View 
-          entering={FadeInDown.delay(600).duration(800)} 
+        <Animated.View
+          entering={FadeInDown.delay(600).duration(800)}
           style={styles.footer}
         >
           <Text style={styles.footerText}>
