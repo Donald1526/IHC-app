@@ -204,12 +204,7 @@ export default function ResultsScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={() => router.back()}
-          >
-            <FontAwesome name="chevron-left" size={20} color="#007AFF" />
-          </TouchableOpacity>
+
           <Text style={styles.title}>Resultados del Análisis</Text>
         </View>
 
