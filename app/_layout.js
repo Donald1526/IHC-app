@@ -3,9 +3,20 @@ import { StatusBar } from 'expo-status-bar';
 import { View, Text, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { usePathname } from 'expo-router';
+import { useEffect } from 'react';
+import * as NavigationBar from 'expo-navigation-bar';
 
 export default function RootLayout() {
   const pathname = usePathname();
+  const setupNavigationBar = async () => {
+    // Cambiar el color de la barra de navegación
+    await NavigationBar.setBackgroundColorAsync('#5ECBC2'); // Mismo color que tu footer
+    await NavigationBar.setButtonStyleAsync('dark'); // Botones oscuros para que se vean bien
+};
+
+useEffect(() => {
+  setupNavigationBar();
+}, []);
   return (
     <>
       <StatusBar style="auto" />

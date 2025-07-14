@@ -1,6 +1,5 @@
 {
   "expo": {
-
     "name": "UniBalance",
     "slug": "UniBalance",
     "version": "1.0.0",
@@ -67,7 +66,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "0c5d25ae-b0bd-4a0c-91bd-cf2ebe99e363"
+        "projectId": "d99da38a-8e2d-4962-8a2a-4eed1e7cd7db"
       }
     }
   }
