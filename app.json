@@ -1,7 +1,10 @@
 {
   "expo": {
-    "name": "UniBalance",
-    "slug": "UniBalance",
+    "androidNavigationBar": {
+      "backgroundColor": "#5ECBC2"
+    },
+    "name": "AplicacionIHC",
+    "slug": "AplicacionIHC",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/IconoNuevo.png",
@@ -30,9 +33,6 @@
         "android.permission.WRITE_EXTERNAL_STORAGE",
         "android.permission.ACCESS_MEDIA_LOCATION"
       ]
-    },
-    "androidNavigationBar": {
-      "backgroundColor": "#5ECBC2"
     },
     "web": {
       "bundler": "metro",
@@ -66,7 +66,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "d99da38a-8e2d-4962-8a2a-4eed1e7cd7db"
+        "projectId": "0c5d25ae-b0bd-4a0c-91bd-cf2ebe99e363"
       }
     }
   }
