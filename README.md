@@ -1,4 +1,4 @@
-# Veanse el video por favor gracias ( paco gei ) 👋
+# Veanse el video por favor gracias 👋
 https://www.youtube.com/watch?v=U23lNFm_J70
 
 
