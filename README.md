@@ -178,11 +178,6 @@ Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más det
 **Desarrollador**: Donald1526  
 **Repositorio**: [https://github.com/Donald1526/IHC-app](https://github.com/Donald1526/IHC-app)
 
-## 🎥 Demo
-
-Para ver la aplicación en funcionamiento, puedes ver el video demo:
-[https://www.youtube.com/watch?v=U23lNFm_J70](https://www.youtube.com/watch?v=U23lNFm_J70)
-
 ---
 
 *Desarrollado con ❤️ para promover el bienestar mental y cognitivo*
