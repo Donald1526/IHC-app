@@ -173,9 +173,19 @@ Las contribuciones son bienvenidas. Por favor:
 
 Este proyecto está bajo la Licencia MIT. Ver el archivo `LICENSE` para más detalles.
 
+## � Equipo de Desarrollo
+
+Este proyecto fue desarrollado por:
+
+- **Melendez Blas, Jhair Roussel** - (22200199)
+- **Huayta Esteban, Piero Alessandro** - (22200022)
+- **Pacotaype Chuchon, Diego Alonzo** - (22200214)
+- **Pizango Chang, Josue Alejandro** - (22200215)
+- **Porras Chavez, Miguel Angel** - (22200036)
+- **Zavaleta Gavilan, Jack Brian** - (22200055)
+
 ## 📞 Contacto
 
-**Desarrollador**: Donald1526  
 **Repositorio**: [https://github.com/Donald1526/IHC-app](https://github.com/Donald1526/IHC-app)
 
 ---
